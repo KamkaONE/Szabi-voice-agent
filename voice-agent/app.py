@@ -118,7 +118,7 @@ async def run_direct():
             llm=llm,
             stt=stt,
             tts=tts,
-            turn_detection=EnglishModel(),
+            # turn_detection=EnglishModel(),  # Disabled: requires WORKER mode
             vad=silero.VAD.load(),
         )
 

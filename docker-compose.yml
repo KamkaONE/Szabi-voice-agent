@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   livekit:
-    image: livekit/livekit-server:v1.5.2
+    image: livekit/livekit-server:v1.8.2
     command: --config /etc/livekit.yaml
     restart: unless-stopped
     network_mode: host

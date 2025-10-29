@@ -7,13 +7,13 @@ rtc:
   port_range_start: 50000
   port_range_end: 60000
   use_external_ip: true
-  
+
 keys:
   lk_dev_f65eca1e75bbb1259cb0df66c28d8c92d4ea2dfe69b61f9eb76ac93cdb3e7496: lk_secret_ea2e83cf750049512e37cb02636b7a0771ddb0f936660c902523234485e7c7e8
 
 room:
   auto_create: true
   empty_timeout: 300
-  
+
 logging:
   level: info
