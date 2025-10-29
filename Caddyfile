@@ -1,0 +1,10 @@
+szabolcslevai.com {
+    reverse_proxy /token localhost:8080
+    
+    root * /srv
+    file_server
+}
+
+szabolcslevai.com:7882 {
+    reverse_proxy localhost:7880
+}

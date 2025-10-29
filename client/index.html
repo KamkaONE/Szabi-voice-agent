@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LiveKit Voice Agent</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>LiveKit Voice Agent</h1>
+        
+        <div class="controls">
+            <button id="connectBtn">Connect to Agent</button>
+            <button id="disconnectBtn" disabled>Disconnect</button>
+        </div>
+        
+        <div id="status" class="status">Disconnected</div>
+    </div>
+    
+    <!-- Load LiveKit library FIRST -->
+    <script src="lib/livekit-client.umd.js"></script>
+    <!-- Then load your app -->
+    <script src="app.js"></script>
+</body>
+</html>

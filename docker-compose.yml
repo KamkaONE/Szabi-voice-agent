@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  livekit:
+    image: livekit/livekit-server:v1.5.2
+    command: --config /etc/livekit.yaml
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - ./livekit.yaml:/etc/livekit.yaml
+      - livekit_data:/data
+
+  token:
+    build:
+      context: ./token
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    network_mode: host
+    container_name: agent-token
+    environment:
+      - LIVEKIT_API_KEY=${LIVEKIT_API_KEY}
+      - LIVEKIT_API_SECRET=${LIVEKIT_API_SECRET}
+      - LIVEKIT_URL=http://localhost:7880
+      - LIVEKIT_PUBLIC_URL=wss://szabolcslevai.com:7882
+      - ROOM_NAME=default
+    volumes:
+      - ./token:/app
+
+  voiceagent:
+    build:
+      context: ./voice-agent
+    restart: unless-stopped
+    network_mode: host
+    depends_on:
+      - livekit
+      - token
+    env_file:
+      - .env
+    volumes:
+      - ./voice-agent:/app
+      - ./persist:/persist
+
+  webserver:
+    image: caddy:alpine
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - ./client:/srv:ro
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+
+volumes:
+  livekit_data:
+  caddy_data:
+  caddy_config:
