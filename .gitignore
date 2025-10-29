@@ -1,6 +1,9 @@
 # Environment variables (contains API keys!)
 .env
 
+# Claude settings (may contain tokens)
+.claude/settings.local.json
+
 # Python
 __pycache__/
 *.py[cod]
