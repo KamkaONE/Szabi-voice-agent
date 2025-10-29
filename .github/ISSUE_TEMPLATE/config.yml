@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: LiveKit Documentation
+    url: https://docs.livekit.io/
+    about: Official LiveKit documentation and guides
+  - name: LiveKit Community
+    url: https://livekit.io/community
+    about: Join the LiveKit community for discussions and support

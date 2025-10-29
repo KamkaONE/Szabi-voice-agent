@@ -1,0 +1,43 @@
+name: Docker Build Test
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Create .env file for testing
+      run: |
+        cp .env.example .env
+
+    - name: Build voice-agent image
+      run: |
+        docker build -t livekit-voice-agent:test ./voice-agent
+
+    - name: Build token server image
+      run: |
+        docker build -t livekit-token-server:test ./token
+
+    - name: Verify images
+      run: |
+        docker images | grep test
+
+    - name: Test docker-compose config
+      run: |
+        docker-compose config
+
+    - name: Clean up
+      if: always()
+      run: |
+        docker rmi livekit-voice-agent:test livekit-token-server:test || true
