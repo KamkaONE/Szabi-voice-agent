@@ -39,11 +39,12 @@ else
     exit 0
 fi
 
-# Step 2: Stage changes (excluding .env)
+# Step 2: Stage changes (excluding sensitive files)
 echo -e "\n${YELLOW}Step 2: Staging changes...${NC}"
 git add -A
 git reset HEAD .env 2>/dev/null || true  # Unstage .env if accidentally added
-echo "✓ Changes staged (excluding .env)"
+git reset HEAD .claude/settings.local.json 2>/dev/null || true  # Unstage Claude settings
+echo "✓ Changes staged (excluding .env and Claude settings)"
 
 # Step 3: Commit locally
 echo -e "\n${YELLOW}Step 3: Committing changes locally...${NC}"
