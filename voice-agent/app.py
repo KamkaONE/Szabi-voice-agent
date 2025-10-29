@@ -21,7 +21,7 @@ from livekit.agents import (
     ConversationItemAddedEvent,
 )
 from livekit.plugins import deepgram, silero, groq
-from livekit.plugins.turn_detector.english import EnglishModel
+# from livekit.plugins.turn_detector.english import EnglishModel  # Disabled for now
 from deepinfra_tts import DeepInfraTTS
 
 from memory_sql import SQLiteMemory
@@ -149,11 +149,6 @@ async def run_direct():
 # ---------------- WORKER MODE ----------------
 async def entrypoint(ctx: JobContext):
     # env-driven config
-    url       = os.environ["LIVEKIT_URL"]
-    api_key   = os.environ["LIVEKIT_API_KEY"]
-    api_secret= os.environ["LIVEKIT_API_SECRET"]
-    room_name = os.getenv("ROOM_NAME", "default")
-
     DG_MODEL  = os.getenv("DEEPGRAM_MODEL", "nova-3")
     TTS_MODEL = os.getenv("TTS_MODEL", "hexgrad/Kokoro-82M")
     TTS_BASE  = os.getenv("TTS_BASE_URL", "https://api.deepinfra.com/v1/openai")
@@ -162,18 +157,8 @@ async def entrypoint(ctx: JobContext):
     LLM_MODEL = os.getenv("LLM_MODEL", "openai/gpt-oss-120b")
     LLM_TEMP  = float(os.getenv("LLM_TEMPERATURE", "1.0"))
 
-    # mint a room-scoped token for this worker session
-    token = (
-        api.AccessToken(api_key, api_secret)
-        .with_identity("server_agent")
-        .with_grants(api.VideoGrants(room_join=True, room=room_name))
-        .to_jwt()
-    )
-
-    # connect to LiveKit
-    room = rtc.Room()
-    await room.connect(url, token)
-    ctx.room = room
+    # WORKER mode: ctx.room is provided automatically by LiveKit
+    # No need to connect manually
 
     # build chat context from memory
     db = SQLiteMemory(db_path="/opt/Livekit/conversations.db")
@@ -194,7 +179,7 @@ async def entrypoint(ctx: JobContext):
             api_key=DEEPINFRA_API_KEY,
             voice=TTS_VOICE,
         ),
-        turn_detection=EnglishModel(),
+        # turn_detection=EnglishModel(),  # Disabled: requires model download
         vad=silero.VAD.load(),
     )
 
